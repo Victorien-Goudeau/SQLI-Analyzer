@@ -7,20 +7,21 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace SQLI_Analyzer.Analyzer;
 
-    public class TooManyParametersAnalyzer : DiagnosticAnalyzer
+    public sealed class RemoveRedundantCommaAnalyzer : DiagnosticAnalyzer
     {
         private static DiagnosticDescriptor rule = new(
-           RuleIdentifier.MethodTooLong,
-           "Too many Parameters",
-           "There is too many parameters",
-           "Usage",
-           DiagnosticSeverity.Warning,
-           isEnabledByDefault: true);
+            RuleIdentifier.RemoveRedundantComma,
+            "Remove redundant comma",
+            "Remove redundant comma",
+            "Usage",
+            DiagnosticSeverity.Info,
+            isEnabledByDefault: true);
 
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(rule);
 
@@ -29,20 +30,20 @@ namespace SQLI_Analyzer.Analyzer;
             context.EnableConcurrentExecution();
             context.ConfigureGeneratedCodeAnalysis(GeneratedCodeAnalysisFlags.None);
 
-            context.RegisterSyntaxNodeAction(Analyze, SyntaxKind.MethodDeclaration);
+            context.RegisterSyntaxNodeAction(Analyze, SyntaxKind.ArrayInitializerExpression);
         }
-
 
         private static void Analyze(SyntaxNodeAnalysisContext context)
         {
-            var method = (MethodDeclarationSyntax)context.Node;
+            var line = (InitializerExpressionSyntax)context.Node;
 
-            var numberParameterInMethod = method.ParameterList.Parameters.Count;
+            var expression = line.Expressions;
 
-            if (numberParameterInMethod > 3)
-            {
-                context.ReportDiagnostic(Diagnostic.Create(rule, context.Node.GetLocation()));
+            if (!expression.Any() && expression.Count != expression.SeparatorCount)
                 return;
-            }                
+
+            SyntaxToken token = expression.GetSeparator(expression.Count - 1);
+
+            context.ReportDiagnostic(Diagnostic.Create(rule, context.Node.GetLocation(),token));
         }
     }

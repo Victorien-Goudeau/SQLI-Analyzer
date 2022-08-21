@@ -15,7 +15,7 @@ namespace Analyser_Tests.AnalyzerTests
                                 public void Main(int a, int b, int c, int d){ }
                             }
                             ";
-            var expected = Verify.Diagnostic().WithSpan(6, 33, 10, 48);
+            var expected = Verify.Diagnostic().WithSpan(6, 33, 6, 80);
             await Verify.VerifyAnalyzerAsync(source, expected);
         }
     }

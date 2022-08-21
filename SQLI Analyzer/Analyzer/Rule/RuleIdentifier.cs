@@ -14,5 +14,9 @@ namespace SQLI_Analyzer.Rule
         public const string UseEmptyString = "SQ0004";
         public const string MethodTooLong = "SQ0005";
         public const string TooManyParameters = "SQ0006";
+        public const string RemoveRedundantComma = "SQ0007";
+        public const string RemoveUnusedParameterInMethod = "SQ0008";
+        public const string SimplifyBooleanCondition = "SQ0010";
+        public const string CollapseIf = "SQ0011";
     }
 }
