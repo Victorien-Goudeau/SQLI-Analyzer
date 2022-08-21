@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.3.32804.467
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SQLI Analyzer", "SQLI Analyzer.csproj", "{3B404A0F-CD7A-4670-B7D9-AB5C75E07B79}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SQLI.Analyzer", "SQLI.Analyzer.csproj", "{3B404A0F-CD7A-4670-B7D9-AB5C75E07B79}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SQLI Analyzer Test", "..\SQLI Analyzer Test\SQLI Analyzer Test.csproj", "{A7512777-CB5C-463A-9CBC-790DCD4BF612}"
 EndProject

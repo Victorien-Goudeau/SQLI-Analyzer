@@ -34,7 +34,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SQLI Analyzer\SQLI Analyzer.csproj" />
+    <ProjectReference Include="..\SQLI Analyzer\SQLI.Analyzer.csproj" />
   </ItemGroup>
 
 </Project>

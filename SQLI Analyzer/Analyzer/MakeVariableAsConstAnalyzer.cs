@@ -41,8 +41,9 @@ namespace SQLI_Analyzer.Analyzer;
             if (localDeclaration.Modifiers.Any(SyntaxKind.ConstKeyword))           
                 return;
 
-        // Ensure that all variables in the local declaration have initializers that
-        // are assigned with constant values.
+        TypeSyntax variableTypeName = localDeclaration.Declaration.Type;
+        ITypeSymbol variableType = context.SemanticModel.GetTypeInfo(variableTypeName, context.CancellationToken).ConvertedType;
+
         foreach (VariableDeclaratorSyntax variable in localDeclaration.Declaration.Variables)
         {
             EqualsValueClauseSyntax initializer = variable.Initializer;
@@ -56,22 +57,36 @@ namespace SQLI_Analyzer.Analyzer;
             {
                 return;
             }
+            
+            Conversion conversion = context.SemanticModel.ClassifyConversion(initializer.Value, variableType);
+            if (!conversion.Exists || conversion.IsUserDefined)
+            {
+                return;
+            }
+
+            if (constantValue.Value is string)
+            {
+                if (variableType.SpecialType != SpecialType.System_String)
+                {
+                    return;
+                }
+            }
+            else if (variableType.IsReferenceType && constantValue.Value != null)
+            {
+                return;
+            }
         }
 
-        // Perform data flow analysis on the local declaration.
         DataFlowAnalysis dataFlowAnalysis = context.SemanticModel.AnalyzeDataFlow(localDeclaration);
 
         foreach (VariableDeclaratorSyntax variable in localDeclaration.Declaration.Variables)
         {
-            // Retrieve the local symbol for each variable in the local declaration
-            // and ensure that it is not written outside of the data flow analysis region.
             ISymbol variableSymbol = context.SemanticModel.GetDeclaredSymbol(variable, context.CancellationToken);
             if (dataFlowAnalysis.WrittenOutside.Contains(variableSymbol))
             {
                 return;
             }
         }
-
 
         context.ReportDiagnostic(Diagnostic.Create(rule, context.Node.GetLocation(), localDeclaration.Declaration.Variables.First().Identifier.ValueText));
         }

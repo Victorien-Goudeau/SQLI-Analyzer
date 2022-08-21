@@ -10,23 +10,23 @@ namespace Analyser_Tests.AnalyzerTests
     public class MakeVariableAsConstAnalyzer
     {
 
-        [Fact]
-        public async void Should_Find_Diagnostic()
-        {
-            var source = @"
-using System;
+       
+        //        public async void Should_Find_Diagnostic()
+        //        {
+        //            var source = @"
+        //using System;
 
-class Program
-{
-    static void Main()
-    {
-        [|var item = 4;|]
-    }
-}
-";
-            
+        //class Program
+        //{
+        //    static void Main()
+        //    {
+        //        [|var item = 4;|]
+        //    }
+        //}
+        //";
 
-            await Verify.VerifyAnalyzerAsync(source);
-        }
-    }
-}
+
+        //            await Verify.VerifyAnalyzerAsync(source);
+        //        }
+        //}
+    } }

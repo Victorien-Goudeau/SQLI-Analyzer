@@ -43,30 +43,27 @@ namespace SQLI_Analyzer.CodeFixes
                                             LocalDeclarationStatementSyntax localDeclaration,
                                             CancellationToken cancellationToken)
         {
-            // Remove the leading trivia from the local declaration.
+
             SyntaxToken firstToken = localDeclaration.GetFirstToken();
             SyntaxTriviaList leadingTrivia = firstToken.LeadingTrivia;
             LocalDeclarationStatementSyntax trimmedLocal = localDeclaration.ReplaceToken(
                 firstToken, firstToken.WithLeadingTrivia(SyntaxTriviaList.Empty));
 
-            // Create a const token with the leading trivia.
+
             SyntaxToken constToken = SyntaxFactory.Token(leadingTrivia, SyntaxKind.ConstKeyword, SyntaxFactory.TriviaList(SyntaxFactory.ElasticMarker));
 
-            // Insert the const token into the modifiers list, creating a new modifiers list.
+
             SyntaxTokenList newModifiers = trimmedLocal.Modifiers.Insert(0, constToken);
-            // Produce the new local declaration.
+
             LocalDeclarationStatementSyntax newLocal = trimmedLocal
                 .WithModifiers(newModifiers)
                 .WithDeclaration(localDeclaration.Declaration);
 
-            // Add an annotation to format the new local declaration.
             LocalDeclarationStatementSyntax formattedLocal = newLocal.WithAdditionalAnnotations(Formatter.Annotation);
 
-            // Replace the old local declaration with the new local declaration.
             SyntaxNode oldRoot = await document.GetSyntaxRootAsync(cancellationToken).ConfigureAwait(false);
             SyntaxNode newRoot = oldRoot.ReplaceNode(localDeclaration, formattedLocal);
 
-            // Return document with transformed tree.
             return document.WithSyntaxRoot(newRoot);
         }
        

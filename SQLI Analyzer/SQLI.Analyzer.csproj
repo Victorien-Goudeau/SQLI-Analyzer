@@ -5,6 +5,11 @@
     <RootNamespace>SQLI_Analyzer</RootNamespace>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <Title>SQLI_SMART_BUILD_ROUEN_ANALYZER</Title>
+    <RepositoryUrl>https://github.com/Victorien-Goudeau/SQLI-Analyzer</RepositoryUrl>
+    <Authors>$(AssemblyName_Smart_Build_Rouen)</Authors>
+    <PackageId />
   </PropertyGroup>
 
   <ItemGroup>
